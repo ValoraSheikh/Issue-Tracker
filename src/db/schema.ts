@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   integer,
   pgEnum,
@@ -25,7 +26,7 @@ export const projectTable = pgTable("projects", {
   id: uuid().defaultRandom().primaryKey().unique(),
   name: varchar({ length: 255 }).notNull(),
   description: varchar({ length: 500 }).notNull(),
-  ownerId: integer()
+  ownerId: varchar()
     .notNull()
     .references(() => usersTable.id),
   createdAt: timestamp().notNull().defaultNow(),
@@ -36,7 +37,7 @@ export const issuesTable = pgTable("issues", {
   id: uuid().defaultRandom().primaryKey().unique(),
   name: varchar({ length: 400 }).notNull(),
   description: varchar().notNull(),
-  projectId: integer()
+  projectId: varchar()
     .notNull()
     .references(() => projectTable.id),
   priority: issuePriority(),
@@ -51,4 +52,28 @@ export const issuesTable = pgTable("issues", {
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp(),
   deletedAt: timestamp(),
+});
+
+export const notificationsTable = pgTable("notifications", {
+  id: uuid().defaultRandom().primaryKey().notNull(),
+  issueId: varchar()
+    .notNull()
+    .references(() => issuesTable.id),
+  assignee: varchar({ length: 255 })
+    .notNull()
+    .references(() => usersTable.id),
+  createdAt: timestamp().notNull().defaultNow(),
+  updatedAt: timestamp(),
+  deletedAt: timestamp(),
+});
+
+export const commentsTable = pgTable("commments", {
+  id: uuid().defaultRandom().primaryKey().notNull(),
+  comment: varchar().notNull(),
+  issueId: varchar()
+    .notNull()
+    .refrences(() => issueTable.id),
+  createdAt: timestamp().notNull().defaultNow(),
+  updatedAt: timestamp(),
+  deteledAt: timestamp(),
 });
