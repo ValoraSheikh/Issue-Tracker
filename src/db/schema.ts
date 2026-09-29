@@ -41,11 +41,11 @@ export const issuesTable = pgTable("issues", {
     .notNull()
     .references(() => projectTable.id),
   priority: issuePriority(),
-  dueDate: timestamp(),
-  assignee: varchar({ length: 255 })
+  dueDate: timestamp().notNull(),
+  assigneeId: varchar({ length: 255 })
     .notNull()
     .references(() => usersTable.id),
-  lables: text()
+  labels: text()
     .array()
     .notNull()
     .default(sql`ARRAY[]::text[]`),
@@ -59,7 +59,7 @@ export const notificationsTable = pgTable("notifications", {
   issueId: varchar()
     .notNull()
     .references(() => issuesTable.id),
-  assignee: varchar({ length: 255 })
+  assigneeId: varchar({ length: 255 })
     .notNull()
     .references(() => usersTable.id),
   createdAt: timestamp().notNull().defaultNow(),
@@ -72,7 +72,10 @@ export const commentsTable = pgTable("commments", {
   comment: varchar().notNull(),
   issueId: varchar()
     .notNull()
-    .refrences(() => issueTable.id),
+    .references(() => issuesTable.id),
+  userId: varchar()
+    .notNull()
+    .references(() => usersTable.id),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp(),
   deteledAt: timestamp(),
