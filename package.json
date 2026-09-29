@@ -4,12 +4,22 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/express": "types/express",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "^1.0.0-rc.4",
+    "tsx": "^4.23.15"
   },
   "peerDependencies": {
     "typescript": "^7"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.4",
+    "drizzle-orm": "^1.0.0-rc.4",
+    "express": "^5.2.1",
+    "morgan": "^1.12.1",
+    "multer": "^2.4.0",
+    "pg": "^8.23.0"
   }
 }
