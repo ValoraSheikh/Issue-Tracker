@@ -18,7 +18,7 @@ export const createComment = async (req: Request, res: Response) => {
   });
 };
 
-export const getAllComments = async (req: Request, res: Response) => {
+export const getIssueComments = async (req: Request, res: Response) => {
   const { issueId } = req.body;
 
   const user = await db
