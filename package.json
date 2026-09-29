@@ -3,6 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/express": "types/express",
