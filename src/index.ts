@@ -1,5 +1,6 @@
 import cookieParser from "cookie-parser";
 import express from "express";
+import dotenv from "dotenv";
 import {
   createUser,
   deleteUser,
@@ -17,6 +18,7 @@ import {
   createIssue,
   deleteIssue,
   getIssue,
+  getProjectIssues,
   updateIssue,
 } from "./controller/issue.controller";
 import {
@@ -31,6 +33,7 @@ import {
   updateComment,
 } from "./controller/comment.controller";
 
+dotenv.config({ path: "./.env" });
 const app = express();
 const port = 3000;
 
@@ -40,9 +43,9 @@ app.use(express.json());
 
 // Users Routes
 app.post("/user", createUser);
-app.get("/user/:id", getUser);
-app.patch("/user/:id", updateUser);
-app.delete("/user/:id", deleteUser);
+app.get("/user", getUser);
+app.patch("/user", updateUser);
+app.delete("/user", deleteUser);
 
 // Projects Routes
 app.post("/project", createProject);
@@ -53,6 +56,7 @@ app.delete("/project/:id", deleteProject);
 
 // Issues Routes
 app.post("/issue", createIssue);
+app.get("/project/issue/:projectId", getProjectIssues)
 app.get("/issue/:id", getIssue);
 app.patch("/issue/:id", updateIssue);
 app.delete("/issue/:id", deleteIssue);
@@ -63,12 +67,12 @@ app.delete("/notification/:id", deleteNotification);
 app.get("/notification/all", getAllNotifications);
 
 // Comments Routes
+app.get("/issue/comment/:issueId", getIssueComments);
 app.post("/comment", createComment);
-app.delete("/comment/:id", deleteComment);
-app.get("/comment/all", getIssueComments);
 app.patch("/comment/:id", updateComment);
+app.delete("/comment/:id", deleteComment);
 
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port http://localhost:${port}/`);
 });
