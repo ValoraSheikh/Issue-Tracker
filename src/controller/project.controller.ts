@@ -1,4 +1,4 @@
-import type { Request, Response} from "express";
+import type { Request, Response } from "express";
 import { db } from "../db/connections";
 import { projectTable } from "../db/schema";
 import { eq, sql } from "drizzle-orm";
@@ -30,7 +30,7 @@ export const getAllProjects = async (req: Request, res: Response) => {
 };
 
 export const getProject = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
 
   const project = await db
     .select()
@@ -45,14 +45,16 @@ export const getProject = async (req: Request, res: Response) => {
 };
 
 export const updateProject = async (req: Request, res: Response) => {
-  const { id, name } = req.body;
+  const { name } = req.body;
+
+  const { id: projectId } = req.params;
 
   await db
     .update(projectTable)
     .set({
       name: name,
     })
-    .where(sql`${projectTable.id} = ${id}`);
+    .where(sql`${projectTable.id} = ${projectId}`);
 
   return res.json({
     res: "",
@@ -62,13 +64,13 @@ export const updateProject = async (req: Request, res: Response) => {
 };
 
 export const deleteProject = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id: projectId } = req.params;
 
-  await db.delete(projectTable).where(eq(projectTable.id, id))
+  await db.delete(projectTable).where(sql`${projectTable.id} = ${projectId}`);
 
   return res.json({
     res: "",
     message: "Project deleted successfully",
     status: 200,
   });
-}
+};
