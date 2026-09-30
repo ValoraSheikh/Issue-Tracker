@@ -20,12 +20,12 @@ export const createUser = async (req: Request, res: Response) => {
 };
 
 export const getUser = async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const { id } = req.user;
 
   const user = await db
     .select()
     .from(usersTable)
-    .where(sql`${usersTable.email} = ${email}`);
+    .where(sql`${usersTable.id} = ${id}`);
 
   return res.json({
     res: user,
@@ -58,7 +58,7 @@ export const updateUser = async (req: Request, res: Response) => {
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.user;
 
   await db.delete(usersTable).where(eq(usersTable.id, id));
 

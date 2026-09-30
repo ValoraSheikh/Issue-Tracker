@@ -4,11 +4,12 @@ import { commentsTable, issuesTable, projectTable } from "../db/schema";
 import { eq, sql } from "drizzle-orm";
 
 export const createComment = async (req: Request, res: Response) => {
-  const { comment, issueId } =
-    req.body;
+  const { comment, issueId } = req.body;
 
   await db.insert(commentsTable).values({
-    comment, issueId, userId: req.user.id
+    comment,
+    issueId,
+    userId: req.user.id,
   });
 
   return res.json({
@@ -19,35 +20,35 @@ export const createComment = async (req: Request, res: Response) => {
 };
 
 export const getIssueComments = async (req: Request, res: Response) => {
-  const { issueId } = req.body;
+  const { issueId } = req.params;
 
-  const user = await db
+  const comments = await db
     .select()
     .from(commentsTable)
     .where(sql`${commentsTable.issueId} = ${issueId}`);
 
   return res.json({
-    res: user,
+    res: comments,
     message: "Comments fetched successfully",
     status: 200,
   });
 };
 
 export const updateComment = async (req: Request, res: Response) => {
-  const { id, userId, comment } =
-    req.body;
+  const { userId, comment } = req.body;
 
-  if (
-    !id &&
-    !userId &&
-    !comment) {
+  const { id } = req.params;
+
+  if (!id && !userId && !comment) {
     return res.json({ status: 400, message: "Fill the fields" });
   }
 
   if (req.user.id != userId) {
     res.json({
-      res: "", message: "You are not authorized", status: 403
-    })
+      res: "",
+      message: "You are not authorized",
+      status: 403,
+    });
   }
 
   await db
@@ -55,7 +56,7 @@ export const updateComment = async (req: Request, res: Response) => {
     .set({
       comment,
     })
-    .where(eq(commentsTable.id, id));
+    .where(sql`${issuesTable.id} = ${id}`);
 
   return res.json({
     res: "",
@@ -65,15 +66,22 @@ export const updateComment = async (req: Request, res: Response) => {
 };
 
 export const deleteComment = async (req: Request, res: Response) => {
-  const { id, userId } = req.body;
+  const { id } = req.params;
 
-  if (req.user.id != userId) {
+  const comment = await db
+    .select()
+    .from(commentsTable)
+    .where(sql`${issuesTable.id} = ${id}`);
+
+  if (req.user.id != comment[0]?.userId) {
     res.json({
-      res: "", message: "You are not authorized", status: 403
-    })
+      res: "",
+      message: "You are not authorized",
+      status: 403,
+    });
   }
 
-  await db.delete(commentsTable).where(eq(commentsTable.id, id));
+  await db.delete(commentsTable).where(sql`${issuesTable.id} = ${id}`);
 
   return res.json({
     res: "",

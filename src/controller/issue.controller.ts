@@ -4,8 +4,15 @@ import { issuesTable, projectTable } from "../db/schema";
 import { eq, sql } from "drizzle-orm";
 
 export const createIssue = async (req: Request, res: Response) => {
-  const { name, description, projectId, priority, dueDate, assignee, labels } =
-    req.body;
+  const {
+    name,
+    description,
+    projectId,
+    priority,
+    dueDate,
+    assigneeId,
+    labels,
+  } = req.body;
 
   await db.insert(issuesTable).values({
     name: name,
@@ -13,7 +20,7 @@ export const createIssue = async (req: Request, res: Response) => {
     priority: priority,
     labels: labels,
     projectId: projectId,
-    assignee: assignee,
+    assigneeId: assigneeId,
     dueDate: dueDate,
   });
 
@@ -25,7 +32,7 @@ export const createIssue = async (req: Request, res: Response) => {
 };
 
 export const getProjectIssues = async (req: Request, res: Response) => {
-  const { projectId } = req.body;
+  const { projectId } = req.params;
 
   const user = await db
     .select()
@@ -40,7 +47,7 @@ export const getProjectIssues = async (req: Request, res: Response) => {
 };
 
 export const getIssue = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
 
   const user = await db
     .select()
@@ -55,8 +62,9 @@ export const getIssue = async (req: Request, res: Response) => {
 };
 
 export const updateIssue = async (req: Request, res: Response) => {
-  const { id, name, description, priority, dueDate, assignee, labels } =
-    req.body;
+  const { name, description, priority, dueDate, assigneeId, labels } = req.body;
+
+  const { id } = req.params;
 
   if (
     !id &&
@@ -64,7 +72,7 @@ export const updateIssue = async (req: Request, res: Response) => {
     !description &&
     !priority &&
     !dueDate &&
-    !assignee &&
+    !assigneeId &&
     !labels
   ) {
     return res.json({ status: 400, message: "Fill the fields" });
@@ -73,15 +81,14 @@ export const updateIssue = async (req: Request, res: Response) => {
   await db
     .update(issuesTable)
     .set({
-      id,
       name,
       description,
       priority,
       dueDate,
-      assignee,
+      assigneeId,
       labels,
     })
-    .where(eq(issuesTable.id, id));
+    .where(sql`${issuesTable.id} = ${id}`);
 
   return res.json({
     res: "",
@@ -91,9 +98,9 @@ export const updateIssue = async (req: Request, res: Response) => {
 };
 
 export const deleteIssue = async (req: Request, res: Response) => {
-  const { id } = req.body;
+  const { id } = req.params;
 
-  await db.delete(issuesTable).where(eq(issuesTable.id, id));
+  await db.delete(issuesTable).where(sql`${issuesTable.id} = ${id}`);
 
   return res.json({
     res: "",
