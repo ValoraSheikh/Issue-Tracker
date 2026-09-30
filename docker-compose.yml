@@ -2,11 +2,15 @@ version: "3.8"
 
 services:
   app:
-    image: postgres
+    image: postgres:18
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: ticket_issuer
     ports:
-      - "3000:3000"
+      - "5433:5432"
     restart: unless-stopped
-    container_name: ticket-issuer
+    container_name: ticket-issuer-db
     depends_on:
       - redis
 
