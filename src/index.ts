@@ -63,7 +63,7 @@ app.delete("/issue/:id", deleteIssue);
 
 // Notifications Routes
 app.post("/notification", createNotification);
-app.delete("/notification/:id", deleteNotification);
+app.delete("/notification", deleteNotification);
 app.get("/notification/all", getAllNotifications);
 
 // Comments Routes

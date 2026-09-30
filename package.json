@@ -24,6 +24,7 @@
     "dotenv": "^18.0.4",
     "drizzle-orm": "^1.0.0-rc.4",
     "express": "^5.2.1",
+    "ioredis": "^6.0.0",
     "morgan": "^1.12.1",
     "multer": "^2.4.0",
     "pg": "^8.23.0"
