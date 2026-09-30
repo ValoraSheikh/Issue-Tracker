@@ -1,9 +1,7 @@
 import { sql } from "drizzle-orm";
 import {
-  integer,
   pgEnum,
   pgTable,
-  serial,
   text,
   timestamp,
   uuid,
@@ -26,7 +24,7 @@ export const projectTable = pgTable("projects", {
   id: uuid().defaultRandom().primaryKey().unique(),
   name: varchar({ length: 255 }).notNull(),
   description: varchar({ length: 500 }).notNull(),
-  ownerId: varchar()
+  ownerId: uuid()
     .notNull()
     .references(() => usersTable.id),
   createdAt: timestamp().notNull().defaultNow(),
@@ -37,12 +35,12 @@ export const issuesTable = pgTable("issues", {
   id: uuid().defaultRandom().primaryKey().unique(),
   name: varchar({ length: 400 }).notNull(),
   description: varchar().notNull(),
-  projectId: varchar()
+  projectId: uuid()
     .notNull()
     .references(() => projectTable.id),
   priority: issuePriority(),
   dueDate: timestamp().notNull(),
-  assigneeId: varchar({ length: 255 })
+  assigneeId: uuid()
     .notNull()
     .references(() => usersTable.id),
   labels: text()
@@ -56,10 +54,10 @@ export const issuesTable = pgTable("issues", {
 
 export const notificationsTable = pgTable("notifications", {
   id: uuid().defaultRandom().primaryKey().notNull(),
-  issueId: varchar()
+  issueId: uuid()
     .notNull()
     .references(() => issuesTable.id),
-  assigneeId: varchar({ length: 255 })
+  assigneeId: uuid()
     .notNull()
     .references(() => usersTable.id),
   createdAt: timestamp().notNull().defaultNow(),
@@ -70,10 +68,10 @@ export const notificationsTable = pgTable("notifications", {
 export const commentsTable = pgTable("commments", {
   id: uuid().defaultRandom().primaryKey().notNull(),
   comment: varchar().notNull(),
-  issueId: varchar()
+  issueId: uuid()
     .notNull()
     .references(() => issuesTable.id),
-  userId: varchar()
+  userId: uuid()
     .notNull()
     .references(() => usersTable.id),
   createdAt: timestamp().notNull().defaultNow(),
