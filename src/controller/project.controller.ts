@@ -12,7 +12,7 @@ export const createProject = async (req: Request, res: Response) => {
     ownerId: req.user.id,
   });
 
-  return res.json({
+  return res.status(200).json({
     res: "",
     message: "Projecy created successfully",
     status: 200,
@@ -22,7 +22,7 @@ export const createProject = async (req: Request, res: Response) => {
 export const getAllProjects = async (req: Request, res: Response) => {
   const projects = await db.select().from(projectTable);
 
-  return res.json({
+  return res.status(200).json({
     data: projects,
     message: "All Projects fetched successfully",
     status: 200,
@@ -37,7 +37,7 @@ export const getProject = async (req: Request, res: Response) => {
     .from(projectTable)
     .where(sql`${projectTable.id} = ${id}`);
 
-  return res.json({
+  return res.status(200).json({
     data: project,
     message: "Project fetched successfully",
     status: 200,
@@ -56,7 +56,7 @@ export const updateProject = async (req: Request, res: Response) => {
     })
     .where(sql`${projectTable.id} = ${projectId}`);
 
-  return res.json({
+  return res.status(200).json({
     data: "",
     message: "Project updated successfully",
     status: 200,
@@ -68,7 +68,7 @@ export const deleteProject = async (req: Request, res: Response) => {
 
   await db.delete(projectTable).where(sql`${projectTable.id} = ${projectId}`);
 
-  return res.json({
+  return res.status(200).json({
     data: "",
     message: "Project deleted successfully",
     status: 200,

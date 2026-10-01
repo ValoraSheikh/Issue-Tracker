@@ -11,7 +11,7 @@ export const createNotification = async (req: Request, res: Response) => {
     assigneeId,
   });
 
-  return res.json({
+  return res.status(200).json({
     data: "",
     message: "Notification created successfully",
     status: 200,
@@ -26,7 +26,7 @@ export const getAllNotifications = async (req: Request, res: Response) => {
     .from(notificationsTable)
     .where(sql`${notificationsTable.assigneeId} = ${assigneeId}`);
 
-  return res.json({
+  return res.status(200).json({
     data: user,
     message: "Notifications fetched successfully",
     status: 200,
@@ -38,7 +38,7 @@ export const deleteNotification = async (req: Request, res: Response) => {
 
   await db.delete(notificationsTable).where(eq(notificationsTable.id, id));
 
-  return res.json({
+  return res.status(200).json({
     data: "",
     message: "Notification deleted successfully",
     status: 200,

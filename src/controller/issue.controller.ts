@@ -24,7 +24,7 @@ export const createIssue = async (req: Request, res: Response) => {
     dueDate: dueDate,
   });
 
-  return res.json({
+  return res.status(200).json({
     data: "",
     message: "Issue created successfully",
     status: 200,
@@ -39,7 +39,7 @@ export const getProjectIssues = async (req: Request, res: Response) => {
     .from(issuesTable)
     .where(sql`${issuesTable.projectId} = ${projectId}`);
 
-  return res.json({
+  return res.status(200).json({
     data: user,
     message: "Issues fetched successfully",
     status: 200,
@@ -54,7 +54,7 @@ export const getIssue = async (req: Request, res: Response) => {
     .from(issuesTable)
     .where(sql`${issuesTable.id} = ${id}`);
 
-  return res.json({
+  return res.status(200).json({
     data: user,
     message: "Issue fetched successfully",
     status: 200,
@@ -75,7 +75,7 @@ export const updateIssue = async (req: Request, res: Response) => {
     !assigneeId &&
     !labels
   ) {
-    return res.json({ status: 400, message: "Fill the fields" });
+    return res.status(400).json({ status: 400, message: "Fill the fields" });
   }
 
   await db
@@ -90,7 +90,7 @@ export const updateIssue = async (req: Request, res: Response) => {
     })
     .where(sql`${issuesTable.id} = ${id}`);
 
-  return res.json({
+  return res.status(200).json({
     data: "",
     message: "Issue updated successfully",
     status: 200,
@@ -102,7 +102,7 @@ export const deleteIssue = async (req: Request, res: Response) => {
 
   await db.delete(issuesTable).where(sql`${issuesTable.id} = ${id}`);
 
-  return res.json({
+  return res.status(200).json({
     data: "",
     message: "Issue deleted successfully",
     status: 200,
