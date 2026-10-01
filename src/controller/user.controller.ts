@@ -36,6 +36,63 @@ export const createUser = async (req: Request, res: Response) => {
   });
 };
 
+export const loginUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  const user = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.email, email));
+
+  if (!user[0]) {
+    return res.json({
+      data: "",
+      message: "User not found",
+      status: 404,
+    });
+  }
+
+  const { password: hashedPassword } = user[0];
+
+  const isPasswordValid = await bcrypt.compare(password, hashedPassword);
+
+  if (!isPasswordValid) {
+    return res.json({
+      data: "",
+      message: "Invalid Credentials",
+      status: 401,
+    });
+  }
+
+  if (!process.env.JWT_SECRET) {
+    return res.json({
+      data: "",
+      message: "SECRET not set",
+      status: 500,
+    });
+  }
+
+  const token = jwt.sign(
+    { id: user[0].id, name: user[0].name, email: user[0].email },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "15m",
+    },
+  );
+
+  req.user = {
+    id: user[0].id,
+    name: user[0].name,
+    email: user[0].email,
+  };
+
+  return res.json({
+    data: user,
+    message: "Login successful",
+    status: 200,
+    token: token,
+  });
+};
 
 export const getUser = async (req: Request, res: Response) => {
   const { id } = req.user;
