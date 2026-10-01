@@ -25,7 +25,7 @@ export const createIssue = async (req: Request, res: Response) => {
   });
 
   return res.json({
-    res: "",
+    data: "",
     message: "Issue created successfully",
     status: 200,
   });
@@ -40,7 +40,7 @@ export const getProjectIssues = async (req: Request, res: Response) => {
     .where(sql`${issuesTable.projectId} = ${projectId}`);
 
   return res.json({
-    res: user,
+    data: user,
     message: "Issues fetched successfully",
     status: 200,
   });
@@ -55,7 +55,7 @@ export const getIssue = async (req: Request, res: Response) => {
     .where(sql`${issuesTable.id} = ${id}`);
 
   return res.json({
-    res: user,
+    data: user,
     message: "Issue fetched successfully",
     status: 200,
   });
@@ -91,7 +91,7 @@ export const updateIssue = async (req: Request, res: Response) => {
     .where(sql`${issuesTable.id} = ${id}`);
 
   return res.json({
-    res: "",
+    data: "",
     message: "Issue updated successfully",
     status: 200,
   });
@@ -103,7 +103,7 @@ export const deleteIssue = async (req: Request, res: Response) => {
   await db.delete(issuesTable).where(sql`${issuesTable.id} = ${id}`);
 
   return res.json({
-    res: "",
+    data: "",
     message: "Issue deleted successfully",
     status: 200,
   });

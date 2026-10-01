@@ -12,7 +12,7 @@ export const createNotification = async (req: Request, res: Response) => {
   });
 
   return res.json({
-    res: "",
+    data: "",
     message: "Notification created successfully",
     status: 200,
   });
@@ -27,7 +27,7 @@ export const getAllNotifications = async (req: Request, res: Response) => {
     .where(sql`${notificationsTable.assigneeId} = ${assigneeId}`);
 
   return res.json({
-    res: user,
+    data: user,
     message: "Notifications fetched successfully",
     status: 200,
   });
@@ -39,7 +39,7 @@ export const deleteNotification = async (req: Request, res: Response) => {
   await db.delete(notificationsTable).where(eq(notificationsTable.id, id));
 
   return res.json({
-    res: "",
+    data: "",
     message: "Notification deleted successfully",
     status: 200,
   });

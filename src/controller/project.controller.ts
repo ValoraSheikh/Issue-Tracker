@@ -23,7 +23,7 @@ export const getAllProjects = async (req: Request, res: Response) => {
   const projects = await db.select().from(projectTable);
 
   return res.json({
-    res: projects,
+    data: projects,
     message: "All Projects fetched successfully",
     status: 200,
   });
@@ -38,7 +38,7 @@ export const getProject = async (req: Request, res: Response) => {
     .where(sql`${projectTable.id} = ${id}`);
 
   return res.json({
-    res: project,
+    data: project,
     message: "Project fetched successfully",
     status: 200,
   });
@@ -57,7 +57,7 @@ export const updateProject = async (req: Request, res: Response) => {
     .where(sql`${projectTable.id} = ${projectId}`);
 
   return res.json({
-    res: "",
+    data: "",
     message: "Project updated successfully",
     status: 200,
   });
@@ -69,7 +69,7 @@ export const deleteProject = async (req: Request, res: Response) => {
   await db.delete(projectTable).where(sql`${projectTable.id} = ${projectId}`);
 
   return res.json({
-    res: "",
+    data: "",
     message: "Project deleted successfully",
     status: 200,
   });

@@ -13,7 +13,7 @@ export const createComment = async (req: Request, res: Response) => {
   });
 
   return res.json({
-    res: "",
+    data: "",
     message: "Comment created successfully",
     status: 200,
   });
@@ -28,7 +28,7 @@ export const getIssueComments = async (req: Request, res: Response) => {
     .where(sql`${commentsTable.issueId} = ${issueId}`);
 
   return res.json({
-    res: comments,
+    data: comments,
     message: "Comments fetched successfully",
     status: 200,
   });
@@ -59,7 +59,7 @@ export const updateComment = async (req: Request, res: Response) => {
     .where(sql`${issuesTable.id} = ${id}`);
 
   return res.json({
-    res: "",
+    data: "",
     message: "Comment updated successfully",
     status: 200,
   });
@@ -84,7 +84,7 @@ export const deleteComment = async (req: Request, res: Response) => {
   await db.delete(commentsTable).where(sql`${issuesTable.id} = ${id}`);
 
   return res.json({
-    res: "",
+    data: "",
     message: "Issue deleted successfully",
     status: 200,
   });
