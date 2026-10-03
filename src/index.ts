@@ -1,9 +1,5 @@
 import cookieParser from "cookie-parser";
-import express, {
-  type NextFunction,
-  type Request,
-  type Response,
-} from "express";
+import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
@@ -72,7 +68,7 @@ app.delete("/user", authMiddleware, deleteUser);
 // Projects Routes
 app.post("/project", authMiddleware, createProject);
 app.get("/project/all", authMiddleware, getAllProjects);
-// app.get("/project/:id", authMiddleware, getProject);
+app.get("/project/:id", authMiddleware, getProject);
 app.patch("/project/:id", authMiddleware, updateProject);
 app.delete("/project/:id", authMiddleware, deleteProject);
 
