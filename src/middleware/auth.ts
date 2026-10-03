@@ -16,19 +16,9 @@ function authMiddleware(req: Request, res: Response, next: NextFunction) {
     });
   }
 
-  const authHeader = req.headers.authorization || "";
+  const token = req.cookies.auth;
 
-  if (!authHeader) {
-    return res.json({
-      data: "",
-      message: "No authorization header",
-      status: 401,
-    });
-  }
-
-  const [schema, token] = authHeader.split(" ");
-
-  if (!token || schema !== "Bearer") {
+  if (!token) {
     return res.json({
       data: "",
       message: "No token",
