@@ -76,7 +76,7 @@ export const loginUser = async (req: Request, res: Response) => {
     { id: user[0].id, name: user[0].name, email: user[0].email },
     process.env.JWT_SECRET,
     {
-      expiresIn: "15m",
+      expiresIn: "1h",
     },
   );
 
@@ -86,16 +86,29 @@ export const loginUser = async (req: Request, res: Response) => {
     email: user[0].email,
   };
 
+  res.cookie("auth", token, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+  });
+
   return res.status(200).json({
-    data: user,
+    data: "",
     message: "Login successful",
     status: 200,
-    token: token,
   });
 };
 
 export const getUser = async (req: Request, res: Response) => {
   const { id } = req.user;
+
+  if (!id) {
+    return res.status(401).json({
+      data: "",
+      message: "user id is required",
+      status: 200,
+    });
+  }
 
   const user = await db
     .select()
