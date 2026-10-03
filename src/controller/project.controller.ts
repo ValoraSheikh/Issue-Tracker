@@ -1,10 +1,12 @@
 import type { Request, Response } from "express";
 import { db } from "../db/connections";
-import { projectTable } from "../db/schema";
-import { eq, sql } from "drizzle-orm";
+import { projectTable, usersTable } from "../db/schema";
+import { sql } from "drizzle-orm";
 
 export const createProject = async (req: Request, res: Response) => {
   const { name, description } = req.body;
+
+  console.log("req.user.id", req.user);
 
   await db.insert(projectTable).values({
     name: name,
@@ -20,7 +22,11 @@ export const createProject = async (req: Request, res: Response) => {
 };
 
 export const getAllProjects = async (req: Request, res: Response) => {
-  const projects = await db.select().from(projectTable);
+  const projects = await db
+    .select()
+    .from(projectTable)
+    .innerJoin(usersTable, sql`${usersTable.id} = ${projectTable.ownerId}`);
+
 
   return res.status(200).json({
     data: projects,
