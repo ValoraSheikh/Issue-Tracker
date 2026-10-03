@@ -61,7 +61,7 @@ app.get("/", (req, res) => {
 });
 
 // Login Route
-app.post("/login", loginUser);
+app.post("/auth/login", loginUser);
 
 // Users Routes
 app.post("/user", createUser);
@@ -71,8 +71,8 @@ app.delete("/user", authMiddleware, deleteUser);
 
 // Projects Routes
 app.post("/project", authMiddleware, createProject);
-app.get("/project/:id", authMiddleware, getProject);
 app.get("/project/all", authMiddleware, getAllProjects);
+// app.get("/project/:id", authMiddleware, getProject);
 app.patch("/project/:id", authMiddleware, updateProject);
 app.delete("/project/:id", authMiddleware, deleteProject);
 
