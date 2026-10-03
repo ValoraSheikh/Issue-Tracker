@@ -10,9 +10,12 @@ export const createIssue = async (req: Request, res: Response) => {
     projectId,
     priority,
     dueDate,
-    assigneeId,
     labels,
   } = req.body;
+
+  const { id: assigneeId } = req.user;
+
+  console.log("all the stuff", name, description, projectId, priority, dueDate, labels, assigneeId);
 
   await db.insert(issuesTable).values({
     name: name,
